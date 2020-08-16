@@ -1,9 +1,22 @@
 # Online Data Engineering: Start to Finish
 The completely free E-Book for setting up and running a Data Engineering stack on a major cloud platform.
 
-## Preface
-
 NOTE: This book is currently incomplete. If you find errors or would like to fill in the gaps, read the **Contributions** section below.
+
+## Table of Contents
+### Chapter 1: Data Engineering Responsibilities
+### Cahpter 2: Accessing Data
+### Chapter 3: Moving Data to Your Storage
+### Chapter 4: Building Your Data Warehouse
+### Chapter 5: Getting Data into Your Warehouse
+### Chapter 6: Transformations for Batch Processing
+### Chapter 7: Orchestrating Your Batch Pipelines
+### Chapter 8: Streaming Your Data
+### Chapter 9: Presenting Data to Your Users
+### Chapter 10: Wrapping up
+
+
+## Preface
 
 ### Summary
 This is a book designed to teach you all you need to know to set up a data engineering stack on [Google Cloud Platform](https://cloud.google.com/), [Amazon Web Services](https://aws.amazon.com/), and [Microsoft Azure](https://azure.microsoft.com/en-us/). Each chapter will take a general concept in Data Engineering, discuss the concept generally, then go into implementation details for each cloud provider.
