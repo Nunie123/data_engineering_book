@@ -4,16 +4,16 @@ The completely free E-Book for setting up and running a Data Engineering stack o
 NOTE: This book is currently incomplete. If you find errors or would like to fill in the gaps, read the **Contributions** section below.
 
 ## Table of Contents
-### Chapter 1: Data Engineering Responsibilities
-### Cahpter 2: Accessing Data
-### Chapter 3: Moving Data to Your Storage
-### Chapter 4: Building Your Data Warehouse
-### Chapter 5: Getting Data into Your Warehouse
-### Chapter 6: Transformations for Batch Processing
-### Chapter 7: Orchestrating Your Batch Pipelines
-### Chapter 8: Streaming Your Data
-### Chapter 9: Presenting Data to Your Users
-### Chapter 10: Wrapping up
+Chapter 1: Data Engineering Responsibilities <br>
+Cahpter 2: Accessing Data<br>
+Chapter 3: Moving Data to Your Storage<br>
+Chapter 4: Building Your Data Warehouse<br>
+Chapter 5: Getting Data into Your Warehouse<br>
+Chapter 6: Transformations for Batch Processing<br>
+Chapter 7: Orchestrating Your Batch Pipelines<br>
+Chapter 8: Streaming Your Data<br>
+Chapter 9: Presenting Data to Your Users<br>
+Chapter 10: Wrapping up
 
 
 ## Preface
