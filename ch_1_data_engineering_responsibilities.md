@@ -3,8 +3,9 @@
 NOTE: This book is currently incomplete. If you find errors or would like to fill in the gaps, read the **Contributions** section below.
 
 ## Table of Contents
-Chapter 1: Data Engineering Responsibilities <br>
-Cahpter 2: Accessing Data<br>
+[Preface](https://github.com/Nunie123/data_engineering_book)
+**Chapter 1: Data Engineering Responsibilities** <br>
+[Chapter 2: Accessing Data](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md)<br>
 Chapter 3: Moving Data to Your Storage<br>
 Chapter 4: Building Your Data Warehouse<br>
 Chapter 5: Getting Data into Your Warehouse<br>
@@ -14,6 +15,7 @@ Chapter 8: Streaming Your Data<br>
 Chapter 9: Presenting Data to Your Users<br>
 Chapter 10: Wrapping up
 
+---
 
 ## Chapter 1: Data Engineering Responsibilities
 
@@ -45,7 +47,7 @@ In addition to a variety of sources, you will likely encounter a variety of file
 * Parquet
 
 A Data Engineer's job is to automate and operationalize their data pipelines. A dependency of these pipelines is the source data being where you expect it in the format you expect it to be in. You will experience frustration when a source file is missing or malformed, and your pipeline breaks. To handle this you need to do two things:
-1. To the extent possible, extract gaurantees from the providers of the source files detailing how and when the files will be provided.
+1. To the extent possible, extract guarantees from the providers of the source files detailing how and when the files will be provided.
 2. Build appropriate fault tolerance into your extract processes. Understand when it is ok for a source file is missing, and when you need to wake someone up in the middle of the night because a source file is missing. Set your alerts as needed for each pipeline.
 
 If possible, build rapport with the people that maintain your source files. There's a good chance you'll be working together to solve a problem in the future. Many a Data Engineer has had a stressful day because the managers of an upstream system didn't think to warn them of a schema change or service outage. Establishing relationships helps reduce that problem.
@@ -62,10 +64,10 @@ You'll also need to decide what to do when the source data doesn't neatly fit in
 #### Load
 The last piece of the puzzle is bringing your data into your Warehouse. If you've got your transformation right, this should be a piece of cake. The trick here is to handle the merging of new data with existing data. Think about whether you are replacing the existing data, appending to the existing data, or applying business logic to decide which records to keep and which to discard.
 
-This step will be a little more complicated if you are doing an Extract, Load, Transorm (ELT) pipeline. Because the data hasn't been transformed yet you'll have to verify that the source data will fit into your Warehouse. This can be problematic when the data is in a format not supported by your Data Warehouse solution (e.g. your Data Warehouse might not easily support nested JSON files). In this case, even if your general process is ELT, you may need to perform some minor transformations to the data to ensure it loads into your Data Warehouse solution.
+This step will be a little more complicated if you are doing an Extract, Load, Transform (ELT) pipeline. Because the data hasn't been transformed yet you'll have to verify that the source data will fit into your Warehouse. This can be problematic when the data is in a format not supported by your Data Warehouse solution (e.g. your Data Warehouse might not easily support nested JSON files). In this case, even if your general process is ELT, you may need to perform some minor transformations to the data to ensure it loads into your Data Warehouse solution.
 
 #### ETL vs ELT
-Why would you choose ELT over ETL, or vice-versa? They are both good options, so making the decision of which to choose comes down to your specific use-case and personal preference. ETL is nice because you don't have to worry about the source file being compatibale with your Data Warehouse solution. The transformations are done right away, often by a tool like Spark or Pandas, and the data is in it's final form when you start uploading it to your warehouse.
+Why would you choose ELT over ETL, or vice-versa? They are both good options, so making the decision of which to choose comes down to your specific use-case and personal preference. ETL is nice because you don't have to worry about the source file being compatible with your Data Warehouse solution. The transformations are done right away, often by a tool like Spark or Pandas, and the data is in it's final form when you start uploading it to your warehouse.
 
 However, an ELT is nice because you can rely on the Warehouse system to process your transformations for you, instead of worrying about adding additional infrastructure (like spinning up a Spark cluster) to handle the transformations.
 
@@ -73,11 +75,11 @@ If most of your source files fit nicely into your Warehouse without transformati
 
 If your source files are heavily nested JSON files and your Warehouse does not have good options for dealing with JSON files, then ETL is likely a good choice.
 
-Another highly important factor is: what technolgies are you most familiar with. If your Data Engineering team has a lot of experience with Spark, and only a little experience with AWS Redshift, then it makes sense to leverage your Spark expertise and adopt an ETL model.
+Another highly important factor is: what technologies are you most familiar with. If your Data Engineering team has a lot of experience with Spark, and only a little experience with AWS Redshift, then it makes sense to leverage your Spark expertise and adopt an ETL model.
 
 ### Data Warehousing
 The terms "Data Lake", "Data Warehouse", and "Data Mart" are used differently for different organizations. My definitions are as follows:
-* Data Lake: a collection of all the data within an orgainzation with no schema enforced across the various pieces of data.
+* Data Lake: a collection of all the data within an organization with no schema enforced across the various pieces of data.
 * Data Warehouse: a collection of all the data within an organization that is being made available for analytics. A schema is enforced across all pieces of data.
 * Data Mart: like a Data Warehouse, but focusing on a subset of the data available for analysis within an organization.
 
@@ -85,7 +87,7 @@ I'll being using "Data Warehouse" as a general term for a structured data store 
 
 The most important thing to consider when designing your Data Warehouse is: what data structures will provide the most value for my users?
 
-Answering that question should involve lots of conversations with the data analysts and data scientists within your organization. Also keep in mind that the best Data Warehouse structure will be a moving target. Your users will have evolveing needs, and you will need to evolve the Data Warehouse to meet those needs.
+Answering that question should involve lots of conversations with the data analysts and data scientists within your organization. Also keep in mind that the best Data Warehouse structure will be a moving target. Your users will have evolving needs, and you will need to evolve the Data Warehouse to meet those needs.
 
 More detail on the best practices for designing your Data Warehouse are available in: **Chapter 4: Building Your Data Warehouse**
 
