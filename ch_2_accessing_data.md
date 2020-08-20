@@ -1,6 +1,6 @@
 # Data Engineering in the Cloud: Start to Finish
 
-NOTE: This book is currently incomplete. If you find errors or would like to fill in the gaps, read the **Contributions** section below.
+NOTE: This book is currently incomplete. If you find errors or would like to fill in the gaps, read the **Contributions** section [here](https://github.com/Nunie123/data_engineering_book).
 
 ## Table of Contents
 [Preface](https://github.com/Nunie123/data_engineering_book) <br>
@@ -137,7 +137,7 @@ We've just the scratched the service of these three commands (and completely ign
 
 _PYTHON_
 
-To access GCS from Python you'll need the google-cloud-storage package (`pip install google-cloud-package`). You'll also need to set up authentication. Unlike AWS, Google requires you to set up a service account, generate a key as a JSON file, then point the `GOOGLE_APPLICATION_CREDENTIALS environment variable at this JSON file. More details are [here](https://cloud.google.com/storage/docs/reference/libraries#client-libraries-install-python.
+To access GCS from Python you'll need the google-cloud-storage package (`pip install google-cloud-package`). You'll also need to set up authentication. Unlike AWS, Google requires you to set up a service account, generate a key as a JSON file, then point the `GOOGLE_APPLICATION_CREDENTIALS` environment variable at this JSON file. More details are [here](https://cloud.google.com/storage/docs/reference/libraries#client-libraries-install-python.
 
 ```Python
 from google.cloud import storage

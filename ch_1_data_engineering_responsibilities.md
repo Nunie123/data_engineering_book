@@ -1,6 +1,6 @@
 # Data Engineering in the Cloud: Start to Finish
 
-NOTE: This book is currently incomplete. If you find errors or would like to fill in the gaps, read the **Contributions** section below.
+NOTE: This book is currently incomplete. If you find errors or would like to fill in the gaps, read the **Contributions** section [here](https://github.com/Nunie123/data_engineering_book).
 
 ## Table of Contents
 [Preface](https://github.com/Nunie123/data_engineering_book) <br>
