@@ -1,10 +1,10 @@
-# Online Data Engineering: Start to Finish
+# Data Engineering in the Cloud: Start to Finish
 The completely free E-Book for setting up and running a Data Engineering stack on a major cloud platform.
 
 NOTE: This book is currently incomplete. If you find errors or would like to fill in the gaps, read the **Contributions** section below.
 
 ## Table of Contents
-**Preface**
+**Preface** <br>
 [Chapter 1: Data Engineering Responsibilities](https://github.com/Nunie123/data_engineering_book/blob/master/ch_1_data_engineering_responsibilities.md) <br>
 [Chapter 2: Accessing Data](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md)<br>
 Chapter 3: Moving Data to Your Storage<br>
