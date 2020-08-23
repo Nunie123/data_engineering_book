@@ -7,7 +7,7 @@ NOTE: This book is currently incomplete. If you find errors or would like to fil
 [Chapter 1: Data Engineering Responsibilities](https://github.com/Nunie123/data_engineering_book/blob/master/ch_1_data_engineering_responsibilities.md) <br>
 [Chapter 2: Accessing Data](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md)<br>
 **Chapter 3: Moving Data to Your Storage**<br>
-Chapter 4: Building Your Data Warehouse<br>
+[Chapter 4: Building Your Data Warehouse](https://github.com/Nunie123/data_engineering_book/blob/master/ch_4_building_data_warehouse.md)<br>
 Chapter 5: Getting Data into Your Warehouse<br>
 Chapter 6: Transformations for Batch Processing<br>
 Chapter 7: Orchestrating Your Pipelines<br>
@@ -107,11 +107,79 @@ copy_file_between_s3_buckets('my-first-bucket', 'memo1.md', 'my-second-bucket', 
 Below I go through using the `gsutil` command line tool and `google.cloud.storage` Python library to save data in GCS. If you're familiar with AWS S3 you'll notice the functionality is quite similar. 
 
 #### `gsutil` Command Line Tool
+As discussed in [Chapter 2: Accessing Data](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md), you'll have to [install and configure](https://cloud.google.com/storage/docs/gsutil_install) `gsutil` to start.
 
+We'll focus on the four commands you'll most commonly be using for storing data in GCS: [mb](https://cloud.google.com/storage/docs/gsutil/commands/mb), [cp](https://cloud.google.com/storage/docs/gsutil/commands/cp), [mv](https://cloud.google.com/storage/docs/gsutil/commands/mv), and [rsync](https://cloud.google.com/storage/docs/gsutil/commands/rsync).
+
+Create "my-bucket":
+
+``` bash
+mb gs://my-bucket
+```
+
+Copy the contents of the "files" directory to "my-bucket" bucket:
+
+``` bash
+> gsutil cp ./files gs://my-bucket/*
+```
+
+Move all .csv files from the current working directory to "my-bucket" bucket inside the "files" sub-folder.
+
+``` bash
+> gsutil cp ./*.csv gs://my-bucket/files/
+```
+
+The rsync command is analogous to the `aws s3 sync` command, discussed above. Use `rsync` to keep a bucket in sync with a local directory:
+
+
+``` bash
+> gsutil rsync . gs://my-bucket
+```
+Check out the `gsutil` [documentation](https://cloud.google.com/storage/docs/gsutil) for more detail.
 
 #### `google.cloud.storage` Python Library
+First things first: make sure you have `google-cloud-package` [installed and configured](https://cloud.google.com/storage/docs/reference/libraries#client-libraries-install-python).
 
+In this section we'll look at [create_bucket()](https://googleapis.dev/python/storage/latest/client.html#google.cloud.storage.client.Client.create_bucket) method from the Client object, the [copy_blob()](https://googleapis.dev/python/storage/latest/buckets.html#google.cloud.storage.bucket.Bucket.copy_blob) method from the Bucket object, and the [upload_from_filename()](https://googleapis.dev/python/storage/latest/blobs.html#google.cloud.storage.blob.Blob.upload_from_filename) method from the Blob object.
+
+``` python
+from google.cloud import storage
+
+def create_bucket(bucket_name: str) -> None:
+    """
+    This function creates a bucket with the provided bucket name. The project and location are set to default.
+    """
+    client = storage.Client()
+    client.create_bucket(bucket_name)
+
+def upload_file_to_bucket(source_filepath: str, bucket_name: str, blob_name: str) -> None:
+    """
+    This function uploads a file to a bucket. The blob_name will be the name of the file in GCS.
+    """
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(blob_name)
+    
+    blob.upload_from_filename(source_filename)
+
+def copy_blob_to_new_bucket(source_bucket_name: str, blob_name: str, dest_bucket_name: str) -> None:
+    """
+    This function copies a file from one bucket to another.
+    """
+    client = storage.Client()
+    source_bucket = client.bucket(source_bucket_name)
+    source_blob = source_bucket.blob(source_blob_name)
+    destination_bucket = client.bucket(dest_bucket_name)
+
+    source_bucket.copy_blob(source_blob, destination_bucket)
+
+create_bucket('test_bucket')
+upload_file_to_bucket('~/files/my_file.md', 'test_bucket', 'my_file.txt')
+copy_blob_to_new_bucket('test_bucket', 'my_file.txt', 'prod_bucket')
+
+```
+Documentation for the Python storage library is [here](https://googleapis.dev/python/storage/latest/client.html).
 
 ---
 
-Next Chapter: Chapter 4: Building Your Data Warehouse
+Next Chapter: [Chapter 4: Building Your Data Warehouse](https://github.com/Nunie123/data_engineering_book/blob/master/ch_4_building_data_warehouse.md)

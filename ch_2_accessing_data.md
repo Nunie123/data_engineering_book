@@ -6,8 +6,8 @@ NOTE: This book is currently incomplete. If you find errors or would like to fil
 [Preface](https://github.com/Nunie123/data_engineering_book) <br>
 [Chapter 1: Data Engineering Responsibilities](https://github.com/Nunie123/data_engineering_book/blob/master/ch_1_data_engineering_responsibilities.md) <br>
 **Chapter 2: Accessing Data**<br>
-Chapter 3: Moving Data to Your Storage<br>
-Chapter 4: Building Your Data Warehouse<br>
+[Chapter 3: Moving Data to Your Storage](https://github.com/Nunie123/data_engineering_book/blob/master/ch_3_moving_data_to_storage.md)<br>
+[Chapter 4: Building Your Data Warehouse](https://github.com/Nunie123/data_engineering_book/blob/master/ch_4_building_data_warehouse.md)<br>
 Chapter 5: Getting Data into Your Warehouse<br>
 Chapter 6: Transformations for Batch Processing<br>
 Chapter 7: Orchestrating Your Pipelines<br>
@@ -21,7 +21,7 @@ Chapter 10: Wrapping up
 A big part of most Data Engineers' jobs is to take data from one place and putting it somewhere else. This chapter is going to talk about how you are going to be taking the data.
 
 ### Cloud Storage Services
-One of the most common places for data to be stored is on cloud storage service. The most common varieties include AWS Simple Storage Solution (S3), Google Cloud Storage (GCS), and Azure Storage. 
+One of the most common places for data to be stored is on cloud storage service. Common varieties include AWS Simple Storage Solution (S3) and Google Cloud Storage (GCS). 
 
 While there is a good chance you won't be building your Data Engineering infrastructure using multiple cloud providers, there's still a good chance you'll have to get data out of more than one cloud storage service. That's the thing about accessing data, usually someone else has control of it and you've got to go to them, wherever and however they're storing it. 
 
@@ -46,17 +46,23 @@ Fortunately, "cp" and "mv" behave just as you would expect. You can copy or move
 
 Copy everything from "my_folder" in the "my-bucket" bucket into the current working directory:
 
-`> aws s3 cp s3://my-bucket/my_folder ./`
+``` bash
+> aws s3 cp s3://my-bucket/my_folder ./
+```
 
 Move the file "iceCream.txt" from "cool-bucket" to "cooler-bucket":
 
-`> aws s3 mv s3://cool-bucket/iceCream.txt s3://cooler-bucket/`
+``` bash
+> aws s3 mv s3://cool-bucket/iceCream.txt s3://cooler-bucket/
+```
 
 The `sync` command you may not be as familiar with, but it's nonetheless pretty intuitive. By syncing an S3 path to a local path any changes to the files in the S3 path will also applied to the local path. For example, you can ensure that any files added to an S3 bucket are also added to your local directory.
 
 Sync files from bucket "coolest-bucket" with current directory.
 
-`> aws s3 sync s3://coolest-bucket .`
+``` bash
+> aws s3 sync s3://coolest-bucket .
+```
 
 There are a huge number of options and capabilities for these tools, so it's definitely worth reading the [documentation](https://docs.aws.amazon.com/cli/latest/userguide/cli-services-s3-commands.html).
 
@@ -115,17 +121,23 @@ The gsutil offers lots of commands for monitoring and manipulating GCS, but in t
 
 Copy the contents of "my-bucket" bucket to the "files" directory:
 
-`> gsutil cp gs://my-bucket/* ./files`
+``` bash
+> gsutil cp gs://my-bucket/* ./files
+```
 
-Move all .csv file from "my-bucket" bucket inside the "files" sub-folder to the current working directory.
+Move all .csv files from "my-bucket" bucket inside the "files" sub-folder to the current working directory.
 
-`> gsutil cp gs://my-bucket/files/*.csv .`
+``` bash
+> gsutil cp gs://my-bucket/files/*.csv .
+```
 
 The rsync command is analogous to the `aws s3 sync` command. It allows you to synchronize a local directory (or GCS bucket or S3 bucket) with a GCS bucket. Files added or altered in the GCS bucket will be added or altered in the rsync directory. It is also possible to have delete files that have been removed from the GCS bucket, but this is not the default behavior.
 
 Synchronize contents of "my-bucket" with current working directory.
 
-`> gsutil rsync gs://my-bucket .`
+``` bash
+> gsutil rsync gs://my-bucket .
+```
 
 We've just the scratched the service of these three commands (and completely ignored a couple dozen other commands), so it's worth your time to review the gsutil [documentation](https://cloud.google.com/storage/docs/gsutil).
 
@@ -145,7 +157,7 @@ def save_blob_to_file(blob_uri: str, destination_path: str) -> None:
 
 def copy_blob_to_new_bucket(source_bucket_name: str, blob_name: str, dest_bucket_name: str) -> None:
     """
-    This function copies a file from 
+    This function copies a file from one bucket to another.
     """
     client = storage.Client()
     source_bucket = client.bucket(source_bucket_name)
@@ -159,9 +171,6 @@ save_blob_to_file('gs://prod_bucket/my_file.txt', '~/Documents/')
 
 ```
 Documentation for the Python storage library is [here](https://googleapis.dev/python/storage/latest/client.html).
-
-
-#### Azure Storage
 
 ### Web APIs
 When dealing with data from 3rd party data sources you'll likely have to navigate their web API to get the data out. Each web API is going to be different, but fortunately the tools to get the data out are often simple to implement. Below is some Python code getting data out of the Wikipedia API. In Chapter 7: Orchestrating Your Pipelines we'll discuss setting up a cloud environment for your code to run in.

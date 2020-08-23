@@ -8,7 +8,7 @@ NOTE: This book is currently incomplete. If you find errors or would like to fil
 [Chapter 1: Data Engineering Responsibilities](https://github.com/Nunie123/data_engineering_book/blob/master/ch_1_data_engineering_responsibilities.md) <br>
 [Chapter 2: Accessing Data](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md)<br>
 [Chapter 3: Moving Data to Your Storage](https://github.com/Nunie123/data_engineering_book/blob/master/ch_3_moving_data_to_storage.md)<br>
-Chapter 4: Building Your Data Warehouse<br>
+[Chapter 4: Building Your Data Warehouse](https://github.com/Nunie123/data_engineering_book/blob/master/ch_4_building_data_warehouse.md)<br>
 Chapter 5: Getting Data into Your Warehouse<br>
 Chapter 6: Transformations for Batch Processing<br>
 Chapter 7: Orchestrating Your Batch Pipelines<br>
@@ -21,7 +21,7 @@ Chapter 10: Wrapping up
 ## Preface
 
 ### Summary
-This is a book designed to teach you all you need to know to set up a data engineering stack on [Google Cloud Platform](https://cloud.google.com/), [Amazon Web Services](https://aws.amazon.com/), and [Microsoft Azure](https://azure.microsoft.com/en-us/). Each chapter will take a general concept in Data Engineering, discuss the concept generally, then go into implementation details for each cloud provider.
+This is a book designed to teach you how to set up a basic data engineering stack on [Google Cloud Platform](https://cloud.google.com/) and [Amazon Web Services](https://aws.amazon.com/). Each chapter will take a general concept in Data Engineering, discuss the concept generally, then go into implementation details for each cloud provider.
 
 ### Who This Book Is For
 This book is for people with coding familiarity that are interested in setting up professional data pipelines and data warehouses using a modern cloud platform. I expect the readers to include:
@@ -36,7 +36,7 @@ This book covers a lot of ground. Many of the subjects we'll cover in just part 
 Finally, there are a vast array of data engineering tools that are in use. I cover many popular tools for data engineering, but many more have been left out of this book due to brevity and my lack of experience with them. If you feel I left off something important, please read the **Contributions** section below.
 
 ### How to Read This Book
-This book is divided into chapters discussing major Data Engineering concepts and functions. Each chapter is then divided into four parts: an overview and then a separate section for GCP, AWS, and Azure. 
+This book is divided into chapters discussing major Data Engineering concepts and functions. Each chapter is then divided into four parts: an overview and then a separate section for GCP and AWS. 
 
 You can read this book front-to-back if you're just looking to get a general familiarity with common tools on the major cloud platforms. Another good option is to pick a cloud platform and just read that section (plus the introduction) for each chapter. Finally, if you know exactly what topic you want to learn more about, you'll have no trouble skipping to the chapter that has your interest.
 

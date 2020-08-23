@@ -7,7 +7,7 @@ NOTE: This book is currently incomplete. If you find errors or would like to fil
 **Chapter 1: Data Engineering Responsibilities** <br>
 [Chapter 2: Accessing Data](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md)<br>
 [Chapter 3: Moving Data to Your Storage](https://github.com/Nunie123/data_engineering_book/blob/master/ch_3_moving_data_to_storage.md)<br>
-Chapter 4: Building Your Data Warehouse<br>
+[Chapter 4: Building Your Data Warehouse](https://github.com/Nunie123/data_engineering_book/blob/master/ch_4_building_data_warehouse.md)<br>
 Chapter 5: Getting Data into Your Warehouse<br>
 Chapter 6: Transformations for Batch Processing<br>
 Chapter 7: Orchestrating Your Batch Pipelines<br>
@@ -21,7 +21,7 @@ Chapter 10: Wrapping up
 
 I promised you a comprehensive book on setting up and maintaining Data Engineering infrastructure, so the first step is explaining what that means. This chapter explains what a Data Engineer typically does. There's a huge variety in the responsibilities for any particular Data Engineering position, so this chapter will help set the scope of what I consider Data Engineering work, and thus the scope of what is covered in this book.
 
-If you don't need this background and want to dive into setting up cloud infrastructure, then skip ahead to **Chapter 2**.
+If you don't need this background and want to dive into setting up cloud infrastructure, then skip ahead to [Chapter 2: Accessing Data](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md).
 
 In short, a Data Engineer is responsible for two things:
 1. Data Pipelines
@@ -89,7 +89,7 @@ The most important thing to consider when designing your Data Warehouse is: what
 
 Answering that question should involve lots of conversations with the data analysts and data scientists within your organization. Also keep in mind that the best Data Warehouse structure will be a moving target. Your users will have evolving needs, and you will need to evolve the Data Warehouse to meet those needs.
 
-More detail on the best practices for designing your Data Warehouse are available in: **Chapter 4: Building Your Data Warehouse**
+More detail on the best practices for designing your Data Warehouse are available in: [Chapter 4: Building Your Data Warehouse](https://github.com/Nunie123/data_engineering_book/blob/master/ch_4_building_data_warehouse.md)
 
 
 ---
