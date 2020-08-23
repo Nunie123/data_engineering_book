@@ -7,7 +7,7 @@ NOTE: This book is currently incomplete. If you find errors or would like to fil
 **Preface** <br>
 [Chapter 1: Data Engineering Responsibilities](https://github.com/Nunie123/data_engineering_book/blob/master/ch_1_data_engineering_responsibilities.md) <br>
 [Chapter 2: Accessing Data](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md)<br>
-Chapter 3: Moving Data to Your Storage<br>
+[Chapter 3: Moving Data to Your Storage](https://github.com/Nunie123/data_engineering_book/blob/master/ch_3_moving_data_to_storage.md)<br>
 Chapter 4: Building Your Data Warehouse<br>
 Chapter 5: Getting Data into Your Warehouse<br>
 Chapter 6: Transformations for Batch Processing<br>
@@ -57,3 +57,7 @@ I look forward to working with you all.
 
 ### License
 This book is licensed under the [Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)](https://creativecommons.org/licenses/by-nc-nd/4.0/) license.
+
+---
+
+Next Chapter: [Chapter 1: Data Engineering Responsibilities](https://github.com/Nunie123/data_engineering_book/blob/master/ch_1_data_engineering_responsibilities.md)

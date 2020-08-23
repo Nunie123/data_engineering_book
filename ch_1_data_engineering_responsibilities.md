@@ -6,7 +6,7 @@ NOTE: This book is currently incomplete. If you find errors or would like to fil
 [Preface](https://github.com/Nunie123/data_engineering_book) <br>
 **Chapter 1: Data Engineering Responsibilities** <br>
 [Chapter 2: Accessing Data](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md)<br>
-Chapter 3: Moving Data to Your Storage<br>
+[Chapter 3: Moving Data to Your Storage](https://github.com/Nunie123/data_engineering_book/blob/master/ch_3_moving_data_to_storage.md)<br>
 Chapter 4: Building Your Data Warehouse<br>
 Chapter 5: Getting Data into Your Warehouse<br>
 Chapter 6: Transformations for Batch Processing<br>
@@ -92,8 +92,6 @@ Answering that question should involve lots of conversations with the data analy
 More detail on the best practices for designing your Data Warehouse are available in: **Chapter 4: Building Your Data Warehouse**
 
 
-
-
 ---
 
-Next Chapter: Chapter 2: Accessing Data
+Next Chapter: [Chapter 2: Accessing Data](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md)

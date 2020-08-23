@@ -18,9 +18,6 @@ Chapter 10: Wrapping up
 ---
 
 ## Chapter 2: Accessing Data
-
-### Overview
-
 A big part of most Data Engineers' jobs is to take data from one place and putting it somewhere else. This chapter is going to talk about how you are going to be taking the data.
 
 ### Cloud Storage Services
@@ -35,11 +32,10 @@ The nice things about getting data out of cloud storage providers are:
 
 While all of these storage services include a web console to perform tasks, we are not going to discuss it here. As a Data Engineer you are focused on automating tasks, setting up an alert to let you know if it breaks, then forgetting about it. That's why we'll be discussing the CLI (Command Line Interface) tools and Python libraries supported by these storage services.
 
-#### AWS S3
+### AWS S3
 S3 allows you to create repositories of files. The repositories are called "buckets" and the files are called "objects". You can create sub-folders within a bucket, though they behave a little differently than directories in a file system. We could got a lot deeper into s3, but this is enough to get us going.
 
-_CLI_
-
+#### `aws` Command Line Tool
 AWS provides CLI tool for download called "aws". The `aws` CLI is available to download from your favorite package manager ([Homebrew](https://brew.sh/), [APT](https://help.ubuntu.com/community/AptGet/Howto), etc.), or you can follow the instructions from AWS [here](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
 
 Once you install the `aws` CLI you will also need to [configure](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) it so that it has access to your (hopefully) secured S3 bucket. For simple set-ups just run `aws configure`.
@@ -64,8 +60,7 @@ Sync files from bucket "coolest-bucket" with current directory.
 
 There are a huge number of options and capabilities for these tools, so it's definitely worth reading the [documentation](https://docs.aws.amazon.com/cli/latest/userguide/cli-services-s3-commands.html).
 
-_PYTHON_
-
+#### `boto3` Python Library
 AWS also provides a Python library, [boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) which can be used for accessing S# (among many other functions). It can be installed with `pip`, `pip3`, or however you install you python packages. You can configure by running `aws configure`, or you can provide you credentials from within your code, as shown below.
 
 This example shows establishing a boto3 s3 client using credentials stored as environment variables.
@@ -108,11 +103,10 @@ copy_s3_file_to_local('my-second-bucket', 'docs/document.txt', '~/Documents/')
 ```
 
 
-#### Google Cloud Storage
+### Google Cloud Storage
 GCS is organized much like AWS's S3, with the ability to create buckets, put objects (called "blobs") into those buckets, and organize blobs inside sub-folders. Indeed, Google has made it as painless as possible to switch from S3 to GCS, going so far as to provide a command line tool that allows copying directly from S3 to GCS (a nice feature).
 
-_CLI_
-
+#### `gsutil` Command Line Tool
 Whereas AWS has a single command line tool, Google Cloud Platform offers several. The tool we'll need to interact with GCS is [gsutil](https://cloud.google.com/storage/docs/gsutil). To get gsutil you need to install Google Cloud SDK, which can be done through your favorite package manager, curl (`curl https://sdk.cloud.google.com | bash`), or by downloading an installer. More details are [here](https://cloud.google.com/storage/docs/gsutil_install).
 
 Once installed, you should configure gsutil by running `gsutil init`. If you intend to use gsutil to access S3 buckets, then you should also set up a [Boto configuration file](https://cloud.google.com/storage/docs/boto-gsutil).
@@ -135,8 +129,7 @@ Synchronize contents of "my-bucket" with current working directory.
 
 We've just the scratched the service of these three commands (and completely ignored a couple dozen other commands), so it's worth your time to review the gsutil [documentation](https://cloud.google.com/storage/docs/gsutil).
 
-_PYTHON_
-
+#### `google.cloud.storage` Python Library
 To access GCS from Python you'll need the google-cloud-storage package (`pip install google-cloud-package`). You'll also need to set up authentication. Unlike AWS, Google requires you to set up a service account, generate a key as a JSON file, then point the `GOOGLE_APPLICATION_CREDENTIALS` environment variable at this JSON file. More details are [here](https://cloud.google.com/storage/docs/reference/libraries#client-libraries-install-python.
 
 ``` python
@@ -231,17 +224,23 @@ Like many popular databases, PostgreSQL (also referred to as Postgres), has an a
 
 Using the `psql` command will bring you to an interactive session where you are connected to a specified database. To connect you will need to provide the host, port, username, password, and database_name:
 
-`> psql -h abc123.us-east-2.rds.amazonaws.com -p 5432 -U my_user_name -W secret_password -d my_database`
+``` bash
+> psql -h abc123.us-east-2.rds.amazonaws.com -p 5432 -U my_user_name -W secret_password -d my_database
+```
 
 To get data out we can use the `\copy` command to send data to a local file (or to another application).
 
 Copy the "customers" table to the "my_customers.csv" file:
 
-`> \copy customers to 'my_customers.csv' with (header, format csv)`
+``` sql
+> \copy customers to 'my_customers.csv' with (header, format csv)
+```
 
 Copy output of SQL query to `gzip` application, where it is saved as "transactions.gz":
 
-`> \copy (select customer_id, transaction_date from transactions where deleted_at is null) to program 'gzip > transactions.gz'`
+``` sql
+> \copy (select customer_id, transaction_date from transactions where deleted_at is null) to program 'gzip > transactions.gz'
+```
 
 As I mentioned above, our focus is on creating an automated process. But the `psql` command brings us into an interactive session, an impediment to our automation goals. Fortunately, the `-c` flag allows us to pass a command directly to `psql`, bypassing the interactive session:
 ``` bash
@@ -291,5 +290,6 @@ save_data_from_query(connection_string, raw_sql, destination_path)
 
 There's lots of additional useful information in SQLAlchemy's Core [documentation](https://docs.sqlalchemy.org/en/13/core/engines_connections.html). When looking at SQLAlchemy documentation and sample code make sure you are looking at code for Core, not ORM. The syntax will look similar, but in many cases ORM syntax will not work when you are using Core.
 
+---
 
-### Web Scraping
+Next Chapter: [Chapter 3: Moving Data to Your Storage](https://github.com/Nunie123/data_engineering_book/blob/master/ch_3_moving_data_to_storage.md)
