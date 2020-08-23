@@ -69,7 +69,7 @@ _PYTHON_
 AWS also provides a Python library, [boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html) which can be used for accessing S# (among many other functions). It can be installed with `pip`, `pip3`, or however you install you python packages. You can configure by running `aws configure`, or you can provide you credentials from within your code, as shown below.
 
 This example shows establishing a boto3 s3 client using credentials stored as environment variables.
-```Python
+``` python
 import boto3
 
 s3_client = boto3.client(
@@ -81,7 +81,7 @@ s3_client = boto3.client(
 
 The S3 client from boto3 provides [many methods](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html), but the ones we can focus on for accessing data are [download_file](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.download_file) and [copy](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#S3.Client.copy)
 
-```Python
+``` python
 import boto3
 
 def copy_s3_file_to_local(bucket_name: str, file_name: str, destination_path: str) -> None:
@@ -139,7 +139,7 @@ _PYTHON_
 
 To access GCS from Python you'll need the google-cloud-storage package (`pip install google-cloud-package`). You'll also need to set up authentication. Unlike AWS, Google requires you to set up a service account, generate a key as a JSON file, then point the `GOOGLE_APPLICATION_CREDENTIALS` environment variable at this JSON file. More details are [here](https://cloud.google.com/storage/docs/reference/libraries#client-libraries-install-python.
 
-```Python
+``` python
 from google.cloud import storage
 
 def save_blob_to_file(blob_uri: str, destination_path: str) -> None:
@@ -173,7 +173,7 @@ Documentation for the Python storage library is [here](https://googleapis.dev/py
 ### Web APIs
 When dealing with data from 3rd party data sources you'll likely have to navigate their web API to get the data out. Each web API is going to be different, but fortunately the tools to get the data out are often simple to implement. Below is some Python code getting data out of the Wikipedia API. In Chapter 7: Orchestrating Your Pipelines we'll discuss setting up a cloud environment for your code to run in.
 
-```Python
+``` python
 """
 These functions get data from the Wikipedia web API. 
 Documentation here: https://www.mediawiki.org/wiki/API:Main_page
@@ -220,8 +220,76 @@ def get_all_results(search_term: str) -> list:
 ```
 
 ### Database Connections
-There's a good chance that another part of your organization will be storing data in a database somewhere, and it'll be your job to get that data out. There is a huge assortment of database systems out there, but we'll focus on PostgreSQL and MongoDB in this section. 
+There's a good chance that another part of your organization will be storing data in a database somewhere, and it'll be your job to get that data out. There is a huge assortment of database systems out there, but we'll focus on common relational database in this section: PostgreSQL. 
 
-These systems could be on-premises or in the cloud. Where the database is hosted will impact authentication, but the process for getting the data out should be the same. We'll look at exporting data through command line tools, using driver libraries for Python, and using SQLAlchemy, a popular library for interacting with databases in Python.
+These systems could be on-premises or in the cloud. Where the database is hosted will impact authentication, but the process for getting the data out should be the same. We'll look at exporting data through command line tools, and through SQLAlchemy, a popular library for interacting with databases in Python.
+
+While people with an analytics background will be familiar with interacting with a database through a client (e.g. [DataGrip](https://www.jetbrains.com/datagrip/), [DBeaver](https://dbeaver.io/), etc.), as a Data Engineer we will need to use other tools better suited for automated operations.
+
+#### `psql` Command Line Tool
+Like many popular databases, PostgreSQL (also referred to as Postgres), has an associated command line tool: `psql`. You can learn how to download the tool [here](https://www.postgresql.org/download/). 
+
+Using the `psql` command will bring you to an interactive session where you are connected to a specified database. To connect you will need to provide the host, port, username, password, and database_name:
+
+`> psql -h abc123.us-east-2.rds.amazonaws.com -p 5432 -U my_user_name -W secret_password -d my_database`
+
+To get data out we can use the `\copy` command to send data to a local file (or to another application).
+
+Copy the "customers" table to the "my_customers.csv" file:
+
+`> \copy customers to 'my_customers.csv' with (header, format csv)`
+
+Copy output of SQL query to `gzip` application, where it is saved as "transactions.gz":
+
+`> \copy (select customer_id, transaction_date from transactions where deleted_at is null) to program 'gzip > transactions.gz'`
+
+As I mentioned above, our focus is on creating an automated process. But the `psql` command brings us into an interactive session, an impediment to our automation goals. Fortunately, the `-c` flag allows us to pass a command directly to `psql`, bypassing the interactive session:
+``` bash
+> psql -h abc123.us-east-2.rds.amazonaws.com -p 5432 -U my_user_name -W secret_password -d my_database -c \
+> "\copy customers to 'my_customers.csv' with (header, format csv)"
+```
+
+Check out the `psql` docs [here](https://www.postgresql.org/docs/current/app-psql.html) for more details about setting up your commands.
+
+In Chapter 7: Orchestrating Your Pipelines we'll discuss how we can automate these shell commands by executing them through Python or through a `.sh` file.
+
+#### SQLAlchemy
+If you've done much work with databases in Python, there's a good chance you've already come across SQLAlchemy. SQLAlchemy provides two types of abstractions for interacting with databases, which it calls "Core" and "ORM". As a Data Engineer you'll pretty much always be using Core, as ORM tends to be more focused towards abstractions helpful for traditional web application developers.
+
+Installing SQLAlchemy is as simple as `pip install SQLAlchemy`. You will also need to install a driver for each type of database you are connecting to (e.g. `pip install psycopg2` for a PostgreSQL database).
+
+To connect you'll need to provide database type, driver name, user name, password, host, and database name:
+
+``` python
+from sqlalchemy import create_engine
+
+# create an engine for postgres database "my_database" using the psycopg2 driver connecting to the host "abc123.host.com"
+engine = create_engine('postgresql+psycopg2://my_username:my_password@abc123.host.com/my_database')
+connection = engine.connect()
+```
+
+Once you've got your connection established you can query the database and use you python code to save locally or send the data to another location:
+
+``` python
+import json
+from sqlalchemy import create_engine
+
+def save_data_from_query(connection_string: str, raw_sql: str, destination_path: str) -> None:
+    engine = create_engine(connection_string)
+    with engine.connect() as connection:    # using `with` here lets us not worry about closing the connection (i.e. `connection.close()`)
+        result = connection.execute(raw_sql)    # SQLAlchemy returns a ResultProxy object: https://docs.sqlalchemy.org/en/13/core/connections.html#sqlalchemy.engine.ResultProxy
+    data = [dict(row) for row in result]    # convert ResultProxy to list of dictionaries
+
+    with open(destination_path, 'w') as f:
+        json.dump(data, f)      # save data as json in local file
+
+connection_string = 'postgresql+psycopg2://my_username:my_password@abc123.host.com/my_database'
+raw_sql = 'select customer_name, email from customers'
+destination_path = 'customers.json'
+save_data_from_query(connection_string, raw_sql, destination_path)
+```
+
+There's lots of additional useful information in SQLAlchemy's Core [documentation](https://docs.sqlalchemy.org/en/13/core/engines_connections.html). When looking at SQLAlchemy documentation and sample code make sure you are looking at code for Core, not ORM. The syntax will look similar, but in many cases ORM syntax will not work when you are using Core.
+
 
 ### Web Scraping
