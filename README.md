@@ -18,12 +18,10 @@ Chapter 10: Wrapping up
 
 ---
 
-## Preface
-
-### Summary
+# Preface
 This is a book designed to teach you how to set up a basic data engineering stack on [Google Cloud Platform](https://cloud.google.com/) and [Amazon Web Services](https://aws.amazon.com/). Each chapter will take a general concept in Data Engineering, discuss the concept generally, then go into implementation details for each cloud provider.
 
-### Who This Book Is For
+## Who This Book Is For
 This book is for people with coding familiarity that are interested in setting up professional data pipelines and data warehouses using a modern cloud platform. I expect the readers to include:
 * Data Engineers looking to learn a new cloud platform or learn more about a platform they are already familiar with.
 * Junior Data Engineers looking to learn best practices for building and working with data engineering infrastructure.
@@ -35,14 +33,14 @@ This book covers a lot of ground. Many of the subjects we'll cover in just part 
 
 Finally, there are a vast array of data engineering tools that are in use. I cover many popular tools for data engineering, but many more have been left out of this book due to brevity and my lack of experience with them. If you feel I left off something important, please read the **Contributions** section below.
 
-### How to Read This Book
+## How to Read This Book
 This book is divided into chapters discussing major Data Engineering concepts and functions. Each chapter is then divided into four parts: an overview and then a separate section for GCP and AWS. 
 
 You can read this book front-to-back if you're just looking to get a general familiarity with common tools on the major cloud platforms. Another good option is to pick a cloud platform and just read that section (plus the introduction) for each chapter. Finally, if you know exactly what topic you want to learn more about, you'll have no trouble skipping to the chapter that has your interest.
 
 I provide code samples in each chapter and you are encouraged to play around with the tools discussed in each chapter. Where applicable, I provide information about pricing both so you can price out your production infrastructure, and so you know how much it will cost to play around with it while learning.
 
-### Contributions
+## Contributions
 
 You may have noticed: this book is hosted on GitHub. This results in three great things:
 1. The book is hosted online and freely available.
@@ -50,12 +48,16 @@ You may have noticed: this book is hosted on GitHub. This results in three great
 3. You can create issues.
 
 If you think the book is wrong, missing information, or otherwise needs to be edited, there are two options:
-1. Make a pull request (the preferred option). If you think something needs to be changed, fork this repo, make the change yourself, then send me a pull request. I'll review it, discuss it with you, if needed, then add it in. Easy peasy. If you're not very familiar with GitHub, instructions for doing this are [here](https://gist.github.com/Chaser324/ce0505fbed06b947d962).
+1. Make a pull request (the preferred option). If you think something needs to be changed, fork this repo, make the change yourself, then send me a pull request. I'll review it, discuss it with you, if needed, then add it in. Easy peasy. If you're not very familiar with GitHub, instructions for doing this are [here](https://gist.github.com/Chaser324/ce0505fbed06b947d962). If your PR is merged it will be considered a donation of your work to the project. You agree to grant a [Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/) license for your work. You will be added the the **Contributors** section on this page once your PR is merged.
 2. Make an issue. Go to the issue tab above, click to create a new issue, then tell me what you think is wrong, preferably including references to specific line numbers.
 
 I look forward to working with you all.
 
-### License
+## Contributors
+Ed Nunes. Ed lives in Chicago and works as a Data Engineer for [Zoro](https://www.zoro.com). Feel free to reach out to him on [LinkedIn](https://www.linkedin.com/in/ed-nunes-b0409b14/).
+
+
+## License
 This book is licensed under the [Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)](https://creativecommons.org/licenses/by-nc-nd/4.0/) license.
 
 ---
