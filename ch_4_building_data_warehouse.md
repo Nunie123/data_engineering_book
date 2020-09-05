@@ -8,14 +8,14 @@ NOTE: This book is currently incomplete. If you find errors or would like to fil
 [Chapter 2: Accessing Data](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md)<br>
 [Chapter 3: Moving Data to Your Storage](https://github.com/Nunie123/data_engineering_book/blob/master/ch_3_moving_data_to_storage.md)<br>
 **Chapter 4: Building Your Data Warehouse**
-Chapter 5: Getting Data into Your Warehouse<br>
+[Chapter 5: Getting Data into Your Warehouse](https://github.com/Nunie123/data_engineering_book/blob/master/ch_5_getting_data_into_warehouse.md)<br>
 Chapter 6: Transformations for Batch Processing<br>
 Chapter 7: Orchestrating Your Pipelines<br>
 Chapter 8: Streaming Your Data<br>
 Chapter 9: Presenting Data to Your Users<br>
 Chapter 10: Infrastructure as Code<br>
 Chapter 11: EXAMPLE - Building Complete Date Engineering Infrastructure in AWS<br>
-Chapter 12: EXAMPLE - Building Complete Date Engineering Infrastructure in AWS
+Chapter 12: EXAMPLE - Building Complete Date Engineering Infrastructure in GCP
 
 ---
 
@@ -33,6 +33,8 @@ In contrast to a Data Lake, a Data Warehouse stores structured data to facilitat
 In general, I avoid using the terms "Data Lake" and "Data Mart", as they are used differently in different organizations and the concepts are simple enough that I don't find much need for the extra jargon. I do use the term "Data Warehouse", but generally just as a synonym for an Analytical Database. This is just my preference when talking about these concepts, generally. Different organizations may imbue these words with a specific meaning for their particular context, which is great as long as the organization has a shared understanding of their meaning.
 
 Another difficult word in the world of Data Engineering is "model". A "data model" refers to the fields, tables, and relationships used to describe a database schema (discussed in more detail in **Designing a Data Warehouse**, below). However, the term "data science model" is also a thing, referring to the algorithm a Data Scientist has designed to get information out of data. These terms are both widely used, so take care to understand which "model" someone is talking about.
+
+"Schema" is another word that can lead to some confusion. The "schema" of a database generally refers to it's architecture or design. So under this definition an ERD is a visualization of a database's schema. This definition can also be applied to specific tables, where that table's schema refers to the particular fields and other structural implementation details for that table. However, "schema" is also frequently used as the term for a namespace and container under which tables are specified (e.g. `select * from schema_name.table_name`). Redshift, along with many other databases, uses this second definition of "schema", while BigQuery uses the term "dataset" to refer to the same concept.
 
 Finally, we get to "normalization", which is a single word for two distinct tasks that Data Engineers regularly undertake. The first use is to describe database design. The general principle is that tables should have a single purpose and duplicating data across multiple tables should be avoided. We'll talk more about why that's useful, below. The second usage refers to data cleaning. If you have a field called `length` and values of `2 in.`, `2"` and `two inches`, you might normalize the data so that the values all read as `2 in.`.
 
@@ -198,7 +200,7 @@ def execute_raw_sql(connection_string: str, raw_sql: str) -> None:
         connection.execute(raw_sql)
 
 
-connection_string = 'postgresql+psycopg2://my_username:my_password@abc123.amazonaws.com:5439/my_database'
+connection_string = 'redshift+psycopg2://my_username:my_password@abc123.amazonaws.com:5439/my_database'
 
 # create a table specifying column names, their data types, and other options
 raw_sql_1 = ('CREATE TABLE users ( '
@@ -224,3 +226,137 @@ execute_raw_sql(connection_string, raw_sql_3)
 More details on the syntax for creating tables is available [here](https://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_TABLE_NEW.html).
 
 ## GCP BigQuery
+
+### Setting Up Your BigQuery Instance
+Unlike Redshift, starting to use BigQuery doesn't involve provisioning specific compute resources. BigQuery is a fully managed service, and all you need to do to start using it is to [create a project](https://cloud.google.com/resource-manager/docs/creating-managing-projects) (which is required for using any GCP services).
+
+The [pricing model for BigQuery](https://cloud.google.com/bigquery/pricing) is also completely different than Redshift. BigQuery automatically scales, providing whatever storage and processing power is needed to accomplish the tasks you send to it. So instead of paying per provisioned machine, you pay per byte stored and byte processed. You'll pay around $0.02 per GB per month for storage, and $5.00 per TB per month for processing queries. Keep in mind that while operations like loading and copying data is free, all queries performed against that data are charged.
+
+### Building Your Tables
+BigQuery has the concept of "datasets", which are the equivalent of "schemas" in Redshift. Essentially they're name-spaces that are convenient for organizing your tables, but there is no impediment to querying tables across datasets.
+
+#### `bq` Command Line Tool
+While the `gsutil` command line tool is used for interacting with Google Cloud Storage, the `bq` command line tool is used for interacting with BigQuery. And unlike Redshift, whose command line tool has limited capability, the `bq` command is a powerful and fully featured tool for interacting with BigQuery.
+
+In [Chapter 2](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md) I explained how to set up the Google Cloud SDK on your machine in order to use the `gsutil` tool. If you completed that then you're already set to use the `bq` tool. If not, then take a look at [Chapter 2](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md) or review the instructions [here](https://cloud.google.com/sdk/docs).
+
+Now that `bq` is working on your machine, it's time to [create some "datasets"](https://cloud.google.com/bigquery/docs/datasets). As mentioned above, in BigQuery "datasets" are namespaces in which tables reside, similar the "schemas" in Redshift.
+
+Here we make a dataset called "my_dataset" inside the project "my_project". Note that you can query tables cross-dataset, but tables in different projects are isolated from each other. In **Chapter 10** we'll discuss how to manage datasets through a deployment pipeline.
+``` bash
+> bq mk --dataset my_project:my_dataset
+```
+
+There's one more piece we need before we can build our table: defining our table's schema. This can be accomplished by defining the schema in-line or by reference to a JSON file. For any tables that have more than a couple fields you'll probably want to make a file.
+
+__my_schema.json__:
+``` json
+[
+    {
+        "description": "The Unique ID for the user.",
+        "mode": "REQUIRED",
+        "name": "user_name",
+        "type": "STRING"
+    },
+    {
+        "description": "The count of of all items purchased by this user.",
+        "mode": "NULLABLE",
+        "name": "items_purchased",
+        "type": "INT64"
+    },
+    {
+        "description": "The sum of all payments made to the organization by the user in USD.",
+        "mode": "NULLABLE",
+        "name": "dollars_spent",
+        "type": "FLOAT64"
+    }
+]
+```
+
+Now we are finally ready to make our table:
+``` bash
+> bq mk --table my_project:my_dataset.my_table my_schema.json
+```
+
+Defining the schema in-line:
+``` bash
+> bq mk --table my_project:my_dataset.my_table user_name:STRING,items_purchased:INT64,dollars_spent:FLOAT64
+```
+
+You can also create a table based on a query from another table:
+``` bash
+> bq query --destination_table my_project:my_dataset.my_table \
+--use_legacy_sql=false \
+'select user_name, items_purchased, dollars_spent from user_dataset.user_activity_table'
+```
+By creating a table from a query the new table will have the field definitions of the fields in the existing table, so there's no need to define a schema.
+
+Finally, you can create a table using the `load` command:
+``` bash
+bq --headless load \
+--source_format=NEWLINE_DELIMITED_JSON \
+--replace \
+my_project:my_dataset.my_table \
+gs://path/to/blob/in/bucket/file.json \\
+my_schema.json
+```
+
+We'll be talking more about the `load` command in **Chapter 5**. You can read the documentation for creating tables [here](https://cloud.google.com/bigquery/docs/tables#bq).
+
+#### Python
+Let's start by adding the `google-cloud-bigquery` library to our python library:
+``` bash
+pip install google-cloud-bigquery
+```
+
+Now we can create our datasets and tables:
+``` python
+from google.cloud import bigquery
+
+def create_dataset(dataset_name: str, project_name: str) -> None:
+    dataset_id = f'{project_name}.{dataset_name}'
+    dataset_obj = bigquery.Dataset(dataset_id)
+    client = bigquery.Client()
+    dataset = client.create_dataset(dataset)
+
+def create_table(table_name: str, dataset_name: str, project_name: str, schema: list) -> None:
+    table_id = f'{project_name}.{dataset_name}.{table_name}'
+    table_obj = bigquery.Table(table_id, schema)
+    client = bigquery.Client()
+    table = client.create_table(table)
+
+project_name = 'my_project'
+dataset_name = 'my_dataset'
+table_name = 'my_table'
+schema = [
+    bigquery.SchemaField('user_name', 'STRING', mode='REQUIRED'),
+    bigquery.SchemaField('items_purchased', 'INT64', mode='REQUIRED'),
+    bigquery.SchemaField('dollars_spent', 'FLOAT64', mode='REQUIRED')
+]
+
+create_dataset(dataset_name, project_name)
+create_table(table_name, dataset_name, project_name)
+```
+
+We can also create a table from a query:
+``` python
+from google.cloud import bigquery
+
+def create_table_from_query(table_name: str, dataset_name: str, project_name: str, raw_sql: str) -> None:
+    table_id = f'{project_name}.{dataset_name}.{table_name}'
+    job_config = bigquery.QueryJobConfig(destination=table_id)
+    query_job = client.query(raw_sql, job_config=job_config)
+    query_job.result()
+
+project_name = 'my_project'
+dataset_name = 'my_dataset'
+table_name = 'my_table'
+raw_sql = 'select user_name, items_purchased, dollars_spent from user_dataset.user_activity_table'
+create_table_from_query(table_name, dataset_name, project_name, raw_sql)
+```
+You can find the fool documentation for the Python API [here](https://googleapis.dev/python/bigquery/latest/index.html).
+
+---
+
+Next Chapter: [Chapter 5: Getting Data into Your Warehouse](https://github.com/Nunie123/data_engineering_book/blob/master/ch_5_getting_data_into_warehouse.md)
+
