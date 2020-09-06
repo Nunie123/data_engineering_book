@@ -34,7 +34,7 @@ The nice things about getting data out of cloud storage providers are:
 
 While all of these storage services include a web console to perform tasks, we are not going to discuss it here. As a Data Engineer you are focused on automating tasks, setting up an alert to let you know if it breaks, then forgetting about it. That's why we'll be discussing the CLI (Command Line Interface) tools and Python libraries supported by these storage services.
 
-## AWS S3
+## Getting Data out of AWS S3
 S3 allows you to create repositories of files. The repositories are called "buckets" and the files are called "objects". You can create sub-folders within a bucket, though they behave a little differently than directories in a file system. We could got a lot deeper into s3, but this is enough to get us going.
 
 ### `aws` Command Line Tool
@@ -111,7 +111,7 @@ copy_s3_file_to_local('my-second-bucket', 'docs/document.txt', '~/Documents/')
 ```
 
 
-## Google Cloud Storage
+## Getting Data out of Google Cloud Storage
 GCS is organized much like AWS's S3, with the ability to create buckets, put objects (called "blobs") into those buckets, and organize blobs inside sub-folders. Indeed, Google has made it as painless as possible to switch from S3 to GCS, going so far as to provide a command line tool that allows copying directly from S3 to GCS (a nice feature).
 
 ### `gsutil` Command Line Tool

@@ -24,7 +24,7 @@ So you've got your data from your various sources, but where are your going to p
 
 Fortunately, AWS and GCP provide some cheap storage solutions that allow you to save your source files without modification. Once your source files are in your cloud storage you can worry about bringing the data into your warehouse.
 
-## AWS
+## Loading Data to AWS S3
 In [Chapter 2](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md) we talked about moving data out of S3. Here we're going to be using the same tools to put data in: the `aws` command line tool and the `boto3` Python library.
 
 When using S3, AWS will charge you based on the amount of storage you are using and the amount of data be transferred out of S3. As we'll discuss in Chapter 5, we'll be transferring data from S3 to Redshift, which is free. Storage costs are tiered and vary by region, but for example, storage in us-east-1 costs between $0.021 and $0.023 per GB per month right now. Storing 20 TB of data in S3 would cost you about $471/month in storage fees. AWS offers cheaper storage options for data that is accessed infrequently and/or you are ok with the data being slow to retrieve. You can visit AWS's S3 pricing page [here](https://aws.amazon.com/s3/pricing/) and their cost calculator [here](https://calculator.aws/#/createCalculator).
@@ -105,7 +105,7 @@ copy_file_between_s3_buckets('my-first-bucket', 'memo1.md', 'my-second-bucket', 
 
 ```
 
-## GCP
+## Loading Data to Google Cloud Storage
 Below I go through using the `gsutil` command line tool and `google.cloud.storage` Python library to save data in GCS. If you're familiar with AWS S3 you'll notice the functionality is quite similar. 
 
 ### `gsutil` Command Line Tool

@@ -121,7 +121,7 @@ Finally, a table like this could be valuable in describing a customer over time.
 
 This was a (very) brief introduction to analytical database design. As mentioned above, you should definitely read up on [database normalization](https://en.wikipedia.org/wiki/Database_normalization) and [dimensional modeling](https://en.wikipedia.org/wiki/Dimensional_modeling) when designing a warehouse for your organization.
 
-## AWS Redshift
+## Making Tables in AWS Redshift
 Now that you've got your Data Warehouse design figured out it's time to buckle down and actually build the thing. 
 
 ### Setting Up Your Cluster
@@ -171,7 +171,7 @@ You've got your Redshift cluster, now let's fill it up with some databases, sche
 #### `aws` Command Line Tool
 The `aws` CLI does not include commands for creating tables. You can create tables using the AWS console, or through the use of a SQL client. The next section discusses connecting to Redshift through Python's `psycopg2` client.
 
-#### Python
+#### `psycopg2` and `sqlalchemy-redshift` Python Library
 Redshift is based off of the PostgreSQL database. One of the benefits of that legacy is that we can use a PostgreSQL driver to connect to Redshift: `psycopg2`. In [Chapter 2](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md) we discussed how to use the SQLAlchemy python library to connect to a PostgreSQL database. Because Redshift is not natively supported by SQLAlchemy, instead we will be using [sqlalchemy-redshift](https://pypi.org/project/sqlalchemy-redshift/), which will allow us to use the familiar syntax of SQLAlchemy to connect with the Redshift cluster.
 
 Just like when connecting to a PostgreSQL database, you'll need to know:
@@ -225,7 +225,7 @@ execute_raw_sql(connection_string, raw_sql_3)
 
 More details on the syntax for creating tables is available [here](https://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_TABLE_NEW.html).
 
-## GCP BigQuery
+## Making Tables in Google BigQuery
 
 ### Setting Up Your BigQuery Instance
 Unlike Redshift, starting to use BigQuery doesn't involve provisioning specific compute resources. BigQuery is a fully managed service, and all you need to do to start using it is to [create a project](https://cloud.google.com/resource-manager/docs/creating-managing-projects) (which is required for using any GCP services).
@@ -303,7 +303,7 @@ my_schema.json
 
 We'll be talking more about the `load` command in **Chapter 5**. You can read the documentation for creating tables [here](https://cloud.google.com/bigquery/docs/tables#bq).
 
-#### Python
+#### `google-cloud-bigquery` Python Library
 Let's start by adding the `google-cloud-bigquery` library to our python library:
 ``` bash
 pip install google-cloud-bigquery
