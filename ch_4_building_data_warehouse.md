@@ -7,9 +7,9 @@ NOTE: This book is currently incomplete. If you find errors or would like to fil
 [Chapter 1: Data Engineering Responsibilities](https://github.com/Nunie123/data_engineering_book/blob/master/ch_1_data_engineering_responsibilities.md) <br>
 [Chapter 2: Accessing Data](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md)<br>
 [Chapter 3: Moving Data to Your Storage](https://github.com/Nunie123/data_engineering_book/blob/master/ch_3_moving_data_to_storage.md)<br>
-**Chapter 4: Building Your Data Warehouse**
+**Chapter 4: Building Your Data Warehouse** <br>
 [Chapter 5: Getting Data into Your Warehouse](https://github.com/Nunie123/data_engineering_book/blob/master/ch_5_getting_data_into_warehouse.md)<br>
-Chapter 6: Transformations for Batch Processing<br>
+[Chapter 6: Transforming Your Batch Data](https://github.com/Nunie123/data_engineering_book/blob/master/ch_6_transforming_batch_data.md)<br>
 Chapter 7: Orchestrating Your Pipelines<br>
 Chapter 8: Streaming Your Data<br>
 Chapter 9: Presenting Data to Your Users<br>
@@ -191,7 +191,6 @@ You'll first need to install `psycopg2` and `sqlalchemy-redshift` into your envi
 
 Now you can import `sqlalchemy` like normal:
 ``` python
-import json
 from sqlalchemy import create_engine
 
 def execute_raw_sql(connection_string: str, raw_sql: str) -> None:
@@ -238,7 +237,7 @@ BigQuery has the concept of "datasets", which are the equivalent of "schemas" in
 #### `bq` Command Line Tool
 While the `gsutil` command line tool is used for interacting with Google Cloud Storage, the `bq` command line tool is used for interacting with BigQuery. And unlike Redshift, whose command line tool has limited capability, the `bq` command is a powerful and fully featured tool for interacting with BigQuery.
 
-In [Chapter 2](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md) I explained how to set up the Google Cloud SDK on your machine in order to use the `gsutil` tool. If you completed that then you're already set to use the `bq` tool. If not, then take a look at [Chapter 2](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md) or review the instructions [here](https://cloud.google.com/sdk/docs).
+In [Chapter 2](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md#user-content-gsutil-command-line-tool) I explained how to set up the Google Cloud SDK on your machine in order to use the `gsutil` tool. If you completed that then you're already set to use the `bq` tool. If not, then take a look at [Chapter 2](https://github.com/Nunie123/data_engineering_book/blob/master/ch_2_accessing_data.md#user-content-gsutil-command-line-tool) or review the instructions [here](https://cloud.google.com/sdk/docs).
 
 Now that `bq` is working on your machine, it's time to [create some "datasets"](https://cloud.google.com/bigquery/docs/datasets). As mentioned above, in BigQuery "datasets" are namespaces in which tables reside, similar the "schemas" in Redshift.
 
@@ -293,20 +292,20 @@ By creating a table from a query the new table will have the field definitions o
 
 Finally, you can create a table using the `load` command:
 ``` bash
-bq --headless load \
+> bq load \
 --source_format=NEWLINE_DELIMITED_JSON \
 --replace \
 my_project:my_dataset.my_table \
-gs://path/to/blob/in/bucket/file.json \\
-my_schema.json
+gs://path/to/blob/in/bucket/file.json \
+./my_schema.json
 ```
 
 We'll be talking more about the `load` command in **Chapter 5**. You can read the documentation for creating tables [here](https://cloud.google.com/bigquery/docs/tables#bq).
 
 #### `google-cloud-bigquery` Python Library
-Let's start by adding the `google-cloud-bigquery` library to our python library:
+Let's start by adding the `google-cloud-bigquery` library to our python environment:
 ``` bash
-pip install google-cloud-bigquery
+> pip install google-cloud-bigquery
 ```
 
 Now we can create our datasets and tables:
